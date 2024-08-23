@@ -1,16 +1,16 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer } from "react";
 
-import Header from './Header';
-import Main from './Main';
-import Loader from './Loader';
-import Error from './Error';
-import StartScreen from './StartScreen';
-import Question from './Question';
-import Progress from './Progress';
-import FinishedScreen from './FinishedScreen';
-import Footer from './Footer';
-import Timer from './Timer';
-import NextButton from './NextButton';
+import Header from "./Header";
+import Main from "./Main";
+import Loader from "./Loader";
+import Error from "./Error";
+import StartScreen from "./StartScreen";
+import Question from "./Question";
+import Progress from "./Progress";
+import FinishedScreen from "./FinishedScreen";
+import Footer from "./Footer";
+import Timer from "./Timer";
+import NextButton from "./NextButton";
 
 const SECS_PER_QUESTION = 15;
 
@@ -19,7 +19,7 @@ const initialState = {
   questions: [],
 
   // values can be: 'loading', 'error', 'ready', 'active', 'finished'
-  status: 'loading',
+  status: "loading",
   index: 0,
   answer: null,
   score: 0,
@@ -29,24 +29,24 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'dataReceived':
+    case "dataReceived":
       return {
         ...state,
         questions: action.payload,
-        status: 'ready',
+        status: "ready",
       };
-    case 'dataFailed':
+    case "dataFailed":
       return {
         ...state,
-        status: 'error',
+        status: "error",
       };
-    case 'start':
+    case "start":
       return {
         ...state,
-        status: 'active',
+        status: "active",
         secondsRemaining: state.questions.length * SECS_PER_QUESTION,
       };
-    case 'newAnswer':
+    case "newAnswer":
       const question = state.questions[state.index];
       return {
         ...state,
@@ -56,30 +56,30 @@ function reducer(state, action) {
             ? state.score + question.points
             : state.score,
       };
-    case 'nextQuestion':
+    case "nextQuestion":
       return { ...state, index: state.index + 1, answer: null };
-    case 'finished':
+    case "finished":
       return {
         ...state,
-        status: 'finished',
+        status: "finished",
         highscore:
           state.score > state.highscore ? state.score : state.highscore,
       };
-    case 'reset':
+    case "reset":
       return {
         ...initialState,
-        status: 'ready',
+        status: "ready",
         questions: state.questions,
         highscore: state.highscore,
       };
-    case 'tick':
+    case "tick":
       return {
         ...state,
         secondsRemaining: state.secondsRemaining - 1,
-        status: state.secondsRemaining === 0 ? 'finished' : state.status,
+        status: state.secondsRemaining === 0 ? "finished" : state.status,
       };
     default:
-      throw new Error('Action unknown');
+      throw new Error("Action unknown");
   }
 }
 
@@ -94,25 +94,25 @@ export default function App() {
 
   useReducer(reducer, initialState);
   useEffect(function () {
-    fetch('http://localhost:9000/questions')
+    fetch("http://localhost:9000/questions")
       .then((res) => res.json())
-      .then((data) => dispatch({ type: 'dataReceived', payload: data }))
-      .catch((err) => dispatch({ type: 'dataFailed' }));
+      .then((data) => dispatch({ type: "dataReceived", payload: data }))
+      .catch((err) => dispatch({ type: "dataFailed" }));
   }, []);
 
   return (
-    <div className='app'>
+    <div className="app">
       <Header />
       <Main>
-        {status === 'loading' && <Loader />}
-        {status === 'error' && <Error />}
-        {status === 'ready' && (
+        {status === "loading" && <Loader />}
+        {status === "error" && <Error />}yio
+        {status === "ready" && (
           <StartScreen
             numQuestions={numQuestions}
             dispatch={dispatch}
           />
         )}
-        {status === 'active' && (
+        {status === "active" && (
           <>
             <Progress
               numQuestions={numQuestions}
@@ -140,7 +140,7 @@ export default function App() {
             </Footer>
           </>
         )}
-        {status === 'finished' && (
+        {status === "finished" && (
           <FinishedScreen
             score={score}
             maxScore={maxScore}

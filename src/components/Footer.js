@@ -1,4 +1,4 @@
-import NextButton from './NextButton';
+import NextButton from "./NextButton";
 
 function Footer({ children }) {
   return <footer>{children}</footer>;
